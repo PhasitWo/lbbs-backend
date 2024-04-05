@@ -1,0 +1,6 @@
+BookCatalog
+    name --> title
+    getBookDetail --> getBookData
+    remove UpdateAmount  (no usage)
+    remove getBookAmount (include in getBookData)
+    
