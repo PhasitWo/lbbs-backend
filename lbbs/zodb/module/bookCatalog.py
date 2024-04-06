@@ -6,9 +6,9 @@ import json
 
 class BookCatalog(persistent.Persistent):
     def __init__(
-        self, id: str, title: str, genre: str, author: str, detail: str
+        self, book_id: str, title: str, genre: str, author: str, detail: str
     ) -> None:
-        self.__id = id
+        self.__id = book_id
         self.__title = title
         self.__genre = genre
         self.__author = author
@@ -21,11 +21,11 @@ class BookCatalog(persistent.Persistent):
     def searchBook(keyword) -> Book:
         pass
 
-    # TODO:TEST
+    # TEST
     def getBookList(self) -> list[Book]:
         return list(self.__bookList)
 
-    # TODO:TEST
+    # TEST
     def getBookData(self) -> str:
         return json.dumps(
             {
@@ -38,7 +38,7 @@ class BookCatalog(persistent.Persistent):
             }
         )
 
-    # TODO:TEST
+    # TEST
     def addBook(self, unique_id: str) -> int:
         """
         Return 1 if the item was added, or 0 otherwise.
@@ -47,8 +47,8 @@ class BookCatalog(persistent.Persistent):
         ret = self.__bookList.insert(unique_id, new_book)
         return ret
 
-    # TODO:TEST
-    def removeBook(self, unique_id: str):
+    # TEST
+    def removeBook(self, unique_id: str) -> int:
         """
         Return 1 if the item was removed, or 0 otherwise.
         """
@@ -57,9 +57,23 @@ class BookCatalog(persistent.Persistent):
         return ret
 
     # TEST
-    # FIXME
-    def editBook(self):
-        pass
+    def editBook(
+        self,
+        book_id: str = None,
+        title: str = None,
+        genre: str = None,
+        author: str = None,
+        detail: str = None,
+    ) -> None:
+        """
+        Take only keyword arguments: id, title, genre. author, detail, amount
+        This function only edits attributes based on keywords that are specified
+        """
+        self.__id = book_id if book_id != None else self.__id
+        self.__title = title if title != None else self.__title
+        self.__genre = genre if genre != None else self.__genre
+        self.__author = author if author != None else self.__author
+        self.__detail = detail if detail != None else self.__detail
 
     def __str__(self) -> str:
         return f"{self.id}-{self.title}"
