@@ -20,7 +20,7 @@ class Book(persistent.Persistent):
         status has to be type: BookStatus, for consistency across database
         Return 1 if the item was edited, or 0 otherwise.
         """
-        if type(status) != BookStatus:
+        if not isinstance(status, BookStatus):
             print(
                 f"[CLASS Book] the status argument has wrong type, status stays the same as '{self.__status.value}'"
             )

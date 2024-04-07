@@ -4,8 +4,7 @@ from module.book import Book, BookStatus
 from module.bookCatalog import BookCatalog
 from module.member import Member
 
-a = Member("123", "mypassword", "JOHN")
-print(a.verify("mypassword"))
+Book()
 
 
 # https://btrees.readthedocs.io/en/latest/api.html#id5
