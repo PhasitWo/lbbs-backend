@@ -1,6 +1,9 @@
 BookCatalog
     name --> title
     getBookDetail --> getBookData
+    add coverURL attribute
     remove UpdateAmount  (no usage)
     remove getBookAmount (include in getBookData)
     
+Book
+    add setStatus
