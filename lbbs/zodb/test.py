@@ -2,13 +2,10 @@ import math
 import BTrees
 from module.book import Book, BookStatus
 from module.bookCatalog import BookCatalog
+from module.member import Member
 
-# b = BookCatalog("123", "The fault in Our Stars", author="Earth")
-# b.editBook(title="test", genre="JOHN!!!")
-# print(b.getBookData())
-b = Book("123", BookStatus.RESERVE)
-b.setStatus("aaa")
-print(b)
+a = Member("123", "mypassword", "JOHN")
+print(a.verify("mypassword"))
 
 
 # https://btrees.readthedocs.io/en/latest/api.html#id5
