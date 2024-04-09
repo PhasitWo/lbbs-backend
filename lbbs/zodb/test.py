@@ -9,10 +9,8 @@ from datetime import date, timedelta
 m = Member("1001", "1234", "JOHN", "student")
 mybook = Book("1234", status=BookStatus.AVAILABLE)
 b = Borrowing("01", mybook, m)
-b.start_borrow()
-a = Borrowing("02", mybook, m)
-print(a.start_reserve())
-print(b.get_borrow_detail()["book"])
+print(id(m))
+print(m.get_borrow_list()[0].get_borrow_detail()[""])
 
 # https://btrees.readthedocs.io/en/latest/api.html#id5
 # a = BTrees.OOBTree.OOBTree()

@@ -21,7 +21,7 @@ class BookCatalog(persistent.Persistent):
         self.__detail = detail
         self.__cover = coverURL
         self.__amount = 0
-        self.__bookList = BTrees.OOBTree.OOBTree()
+        self.__book_list = BTrees.OOBTree.OOBTree()
 
     # TODO what ways to connect to db?
     @staticmethod
@@ -32,7 +32,7 @@ class BookCatalog(persistent.Persistent):
         """
         return book list as [(unique_id, book_object), ...]
         """
-        return list(self.__bookList.items())
+        return list(self.__book_list.items())
 
     def get_book_data(self) -> dict:
         return {
@@ -50,7 +50,7 @@ class BookCatalog(persistent.Persistent):
         Return 1 if the item was added, or 0 otherwise.
         """
         new_book = Book(unique_id)
-        ret = self.__bookList.insert(unique_id, new_book)
+        ret = self.__book_list.insert(unique_id, new_book)
         if ret:
             self.__amount += 1
         return ret
@@ -59,7 +59,7 @@ class BookCatalog(persistent.Persistent):
         """
         Return 1 if the item was removed, or 0 otherwise.
         """
-        ret = self.__bookList.pop(unique_id, 0)
+        ret = self.__book_list.pop(unique_id, 0)
         ret = 1 if ret else ret
         if ret:
             self.__amount -= 1

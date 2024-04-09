@@ -1,9 +1,8 @@
 from datetime import date, timedelta
 from enum import Enum
-from .member import Member
 from .constant import BookStatus, BorrowStatus
 from .book import Book
-
+from .member import Member
 
 # TODO how to check if this reservation is void (does not borrow within expected date) -> use lib called 'schedule'
 class Borrowing:
@@ -11,6 +10,7 @@ class Borrowing:
         self.__id = borrow_id
         self.__book = book  # TEST zodb
         self.__member = member  # TEST zodb
+        self.__member.add_borrowing(self)
         self.__status = None
         # Reserve
         self.__reserve_date = None
