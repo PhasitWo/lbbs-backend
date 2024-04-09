@@ -1,4 +1,5 @@
 from enum import Enum
+from .borrowing import Borrowing
 import persistent
 
 
@@ -14,8 +15,9 @@ class Book(persistent.Persistent):
     ) -> None:
         self.__unique_id = unique_id
         self.__status = status
+        self.__latest_borrowing = None
 
-    def setStatus(self, status: BookStatus) -> None:
+    def set_status(self, status: BookStatus) -> None:
         """
         status has to be type: BookStatus, for consistency across database
         """
@@ -25,6 +27,9 @@ class Book(persistent.Persistent):
         #     )
         #     return 0
         self.__status = status
+
+    def set_latest_borrowing(self, b: Borrowing):
+        self.__latest_borrowing = b
 
     def __str__(self) -> str:
         return f"{self.__unique_id}-{self.__status.value}"

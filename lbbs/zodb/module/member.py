@@ -9,7 +9,7 @@ class Member(User):
         self.__role = role
 
     # TODO
-    def addBorrow(self):
+    def add_borrowing(self):
          pass
 
     def __str__(self) -> str:

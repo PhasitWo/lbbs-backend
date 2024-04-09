@@ -25,16 +25,16 @@ class BookCatalog(persistent.Persistent):
 
     # TODO what ways to connect to db?
     @staticmethod
-    def searchBook(keyword) -> Book:
+    def search_book(keyword) -> Book:
         pass
 
-    def getBookList(self) -> list[Book]:
+    def get_book_list(self) -> list[Book]:
         """
         return book list as [(unique_id, book_object), ...]
         """
         return list(self.__bookList.items())
 
-    def getBookData(self) -> dict:
+    def get_book_data(self) -> dict:
         return {
             "id": self.__id,
             "title": self.__title,
@@ -45,7 +45,7 @@ class BookCatalog(persistent.Persistent):
             "amount": self.__amount,
         }
 
-    def addBook(self, unique_id: str) -> int:
+    def add_book(self, unique_id: str) -> int:
         """
         Return 1 if the item was added, or 0 otherwise.
         """
@@ -55,7 +55,7 @@ class BookCatalog(persistent.Persistent):
             self.__amount += 1
         return ret
 
-    def removeBook(self, unique_id: str) -> int:
+    def remove_book(self, unique_id: str) -> int:
         """
         Return 1 if the item was removed, or 0 otherwise.
         """
@@ -65,7 +65,7 @@ class BookCatalog(persistent.Persistent):
             self.__amount -= 1
         return ret
 
-    def editBook(
+    def edit_book(
         self,
         title: str = None,
         genre: str = None,

@@ -29,35 +29,35 @@ class Borrowing:
 
     # TODO what ways to connect to db?
     @staticmethod
-    def searchBorrowing(keyword) -> list['Borrowing']:
+    def search_borrowing(keyword) -> list['Borrowing']:
         pass
 
     # TEST
-    def startReserve(self) -> None:
+    def start_reserve(self) -> None:
         self.__reserve_date = date.today()
         self.__status = BorrowStatus.RESERVE
         # TODO find expected date from current borrowing for this book
 
     # TEST
-    def startBorrow(self) -> None:
+    def start_borrow(self) -> None:
         self.__borrow_date = date.today()
         self.__due_date = self.__borrow_date + timedelta(days=7)
         self.__status = BorrowStatus.BORROW
 
     # TEST
-    def calculateFine(self) -> float:
+    def calculate_fine(self) -> float:
         FINE_PER_DAY = 100.0  # TODO clarify policy
         day_exceed = max(0, (self.__return_date - self.__due_date).days)
         return FINE_PER_DAY * day_exceed
 
     # TEST
-    def returnBook(self) -> None:
+    def return_book(self) -> None:
         self.__reserve_date = date.today()
         self.__status = BorrowStatus.RETURN
         self.__fine = self.calculateFine()
 
     # TEST
-    def getBorrowDetail(self):
+    def get_borrow_detail(self):
         return {
             "id": self.__id,
             "book": self.__book,
