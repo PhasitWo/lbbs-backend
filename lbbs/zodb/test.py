@@ -3,9 +3,11 @@ import BTrees
 from module.book import Book, BookStatus
 from module.bookCatalog import BookCatalog
 from module.member import Member
+from module.borrowing import Borrowing
+from datetime import date, timedelta
 
-Book()
-
+d1 = date.today()
+print(type(d1 + timedelta(days=7)))
 
 # https://btrees.readthedocs.io/en/latest/api.html#id5
 # a = BTrees.OOBTree.OOBTree()

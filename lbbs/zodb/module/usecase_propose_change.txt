@@ -1,9 +1,15 @@
 BookCatalog
-    name --> title
-    getBookDetail --> getBookData
+    rename name --> title
+    rename getBookDetail --> getBookData
     add coverURL attribute
     remove UpdateAmount  (no usage)
     remove getBookAmount (include in getBookData)
     
 Book
     add setStatus
+
+Borrowing
+    add expectedDate attribute
+    add fine attribute
+    remove setStatus, setReturn
+    add startReserve, startBorrow, returnBook method
