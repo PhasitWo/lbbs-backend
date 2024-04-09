@@ -13,4 +13,4 @@ class Member(User):
          pass
 
     def __str__(self) -> str:
-            return f"{self.__user_id}-{self.__name}-{self.__role}"
+        return f"{self.__user_id}-{self.__name}-{self.__role}"
