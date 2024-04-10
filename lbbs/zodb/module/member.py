@@ -8,14 +8,14 @@ class Member(User):
         role : Student/Teacher
         """
         super().__init__(user_id, password, name)
-        self.__role = role
-        self.__borrow_list = persistent.list.PersistentList()
+        self._role = role
+        self._borrow_list = persistent.list.PersistentList()
 
     def get_borrow_list(self) -> list:
-        return self.__borrow_list
+        return self._borrow_list.copy()
 
     def add_borrowing(self, borrowing) -> None:
-        self.__borrow_list.append(borrowing)
+        self._borrow_list.append(borrowing)
 
     def __str__(self) -> str:
-        return f"{self.__user_id}-{self.__name}-{self.__role}"
+        return f"{self._user_id}-{self._name}-{self._role}"

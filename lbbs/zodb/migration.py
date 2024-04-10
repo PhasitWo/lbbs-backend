@@ -1,18 +1,22 @@
 import ZODB, transaction
 import persistent
 import BTrees
+from datetime import date
+from module.bookCatalog import BookCatalog
+from module.book import Book
+from module.constant import BookStatus
+from module.borrowing import Borrowing
+from module.member import Member
 
-
-connection = ZODB.connection('lbbs/zodb/db.fs')
+connection = ZODB.connection("lbbs/zodb/db.fs")
 root = connection.root
+# TODO check if date attribute will change value of _p_changed
 
-root.author[1].name = "bell"
-print(root.book[1].author)
-# a = Author(1, "John")
-# root.author = BTrees.IOBTree.IOBTree()
-# root.author[1] = a
+b = root.bookCatalog["1"].get_book_list()["123"]
+m: Member = root.member["007"]
+t: Borrowing = root.borrowing["test"]
+t.start_borrow()
+print(root.member.maxKey())
 
-# root.book = BTrees.IOBTree.IOBTree()
-# root.book[1] = Book(1, "example_book", a)
 
 # transaction.commit()

@@ -32,7 +32,7 @@ class BookCatalog(persistent.Persistent):
         """
         return book list as [(unique_id, book_object), ...]
         """
-        return list(self.__book_list.items())
+        return self.__book_list
 
     def get_book_data(self) -> dict:
         return {
@@ -84,4 +84,4 @@ class BookCatalog(persistent.Persistent):
         self.__cover = coverURL if coverURL != None else self.__cover
 
     def __str__(self) -> str:
-        return f"{self.id}-{self.title}"
+        return f"{self.__id}-{self.__title}"

@@ -3,9 +3,10 @@ from enum import Enum
 from .constant import BookStatus, BorrowStatus
 from .book import Book
 from .member import Member
+import persistent
 
 # TODO how to check if this reservation is void (does not borrow within expected date) -> use lib called 'schedule'
-class Borrowing:
+class Borrowing(persistent.Persistent):
     def __init__(self, borrow_id: str, book: Book, member: Member) -> None:
         self.__id = borrow_id
         self.__book = book  # TEST zodb
