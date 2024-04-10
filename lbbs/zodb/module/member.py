@@ -3,7 +3,7 @@ import BTrees
 import persistent
 
 class Member(User):
-    def __init__(self, user_id: str, password: str, name: str, role: str) -> None:
+    def __init__(self, user_id: int, password: str, name: str, role: str) -> None:
         """
         role : Student/Teacher
         """

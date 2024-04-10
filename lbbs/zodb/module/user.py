@@ -3,7 +3,7 @@ import bcrypt
 
 
 class User(persistent.Persistent):
-    def __init__(self, user_id: str, password: str, name: str) -> None:
+    def __init__(self, user_id: int, password: str, name: str) -> None:
         self._user_id = user_id
         self._name = name
         self._salt = bcrypt.gensalt()

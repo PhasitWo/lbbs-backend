@@ -7,7 +7,7 @@ class BookCatalog(persistent.Persistent):
 
     def __init__(
         self,
-        book_id: str,
+        book_id: int,
         title: str,
         genre: str = None,
         author: str = None,
@@ -21,7 +21,7 @@ class BookCatalog(persistent.Persistent):
         self.__detail = detail
         self.__cover = coverURL
         self.__amount = 0
-        self.__book_list = BTrees.OOBTree.OOBTree()
+        self.__book_list = BTrees.IOBTree.IOBTree()
 
     # TODO what ways to connect to db?
     @staticmethod
@@ -45,7 +45,7 @@ class BookCatalog(persistent.Persistent):
             "amount": self.__amount,
         }
 
-    def add_book(self, unique_id: str) -> int:
+    def add_book(self, unique_id: int) -> int:
         """
         Return 1 if the item was added, or 0 otherwise.
         """
@@ -55,7 +55,16 @@ class BookCatalog(persistent.Persistent):
             self.__amount += 1
         return ret
 
-    def remove_book(self, unique_id: str) -> int:
+    def add_book_by_object(self, book:Book) -> int:
+        """
+        Return 1 if the item was added, or 0 otherwise.
+        """
+        ret = self.__book_list.insert(book.get_book_data()["unique_id"], book)
+        if ret:
+            self.__amount += 1
+        return ret
+
+    def remove_book(self, unique_id: int) -> int:
         """
         Return 1 if the item was removed, or 0 otherwise.
         """

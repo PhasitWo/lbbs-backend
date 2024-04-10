@@ -7,7 +7,7 @@ import persistent
 
 # TODO how to check if this reservation is void (does not borrow within expected date) -> use lib called 'schedule'
 class Borrowing(persistent.Persistent):
-    def __init__(self, borrow_id: str, book: Book, member: Member) -> None:
+    def __init__(self, borrow_id: int, book: Book, member: Member) -> None:
         self.__id = borrow_id
         self.__book = book
         self.__member = member

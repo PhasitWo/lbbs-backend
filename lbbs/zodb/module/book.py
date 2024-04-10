@@ -5,7 +5,7 @@ from datetime import date
 
 class Book(persistent.Persistent):
     def __init__(
-        self, unique_id: str, status: BookStatus = BookStatus.AVAILABLE
+        self, unique_id: int, status: BookStatus = BookStatus.AVAILABLE
     ) -> None:
         self.__unique_id = unique_id
         self.__status = status
