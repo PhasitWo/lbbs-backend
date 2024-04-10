@@ -1,6 +1,7 @@
-GET http://127.0.0.1:8000/test/1
+GET http://127.0.0.1:8000/bookCatalog/1
 Content-Type: application/json
 
+###
 
 POST http://127.0.0.1:8000/login 
 Content-Type: application/json

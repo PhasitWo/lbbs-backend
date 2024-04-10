@@ -13,3 +13,6 @@ Borrowing
     add fine attribute
     remove setStatus, setReturn
     add startReserve, startBorrow, returnBook method
+
+ALL
+    change id from str -> int
