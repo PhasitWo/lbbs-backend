@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8000/test
+GET http://127.0.0.1:8000/test/007
 Content-Type: application/json
 
 

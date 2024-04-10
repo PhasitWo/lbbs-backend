@@ -9,8 +9,8 @@ import persistent
 class Borrowing(persistent.Persistent):
     def __init__(self, borrow_id: str, book: Book, member: Member) -> None:
         self.__id = borrow_id
-        self.__book = book  # TEST zodb
-        self.__member = member  # TEST zodb
+        self.__book = book
+        self.__member = member
         self.__member.add_borrowing(self)
         self.__status = None
         # Reserve
