@@ -1,0 +1,142 @@
+[
+    {
+        "id": "/works/OL71037W",
+        "author": "C.S. Lewis",
+        "cover_img": "https://covers.openlibrary.org/b/id/8441376-L.jpg",
+        "first_publish_year": 1950,
+        "title": "The Lion, the Witch and the Wardrobe"
+    },
+    {
+        "id": "/works/OL468362W",
+        "author": "F. Scott Fitzgerald",
+        "cover_img": "https://covers.openlibrary.org/b/id/7152019-L.jpg",
+        "first_publish_year": 1922,
+        "title": "The Beautiful and the Damned"
+    },
+    {
+        "id": "/works/OL27448W",
+        "author": "J.R.R. Tolkien",
+        "cover_img": "https://covers.openlibrary.org/b/id/9255566-L.jpg",
+        "first_publish_year": 1954,
+        "title": "The Lord of the Rings"
+    },
+    {
+        "id": "/works/OL27516W",
+        "author": "J.R.R. Tolkien",
+        "cover_img": "https://covers.openlibrary.org/b/id/10523169-L.jpg",
+        "first_publish_year": 1950,
+        "title": "The Return of the King"
+    },
+    {
+        "id": "/works/OL77958W",
+        "author": "James Fenimore Cooper",
+        "cover_img": "https://covers.openlibrary.org/b/id/8236937-L.jpg",
+        "first_publish_year": 1826,
+        "title": "The Last of the Mohicans"
+    },
+    {
+        "id": "/works/OL471610W",
+        "author": "Agatha Christie",
+        "cover_img": "https://covers.openlibrary.org/b/id/12855259-L.jpg",
+        "first_publish_year": 1942,
+        "title": "The Body in the Library"
+    },
+    {
+        "id": "/works/OL53994W",
+        "author": "Mark Twain",
+        "cover_img": "https://covers.openlibrary.org/b/id/8221267-L.jpg",
+        "first_publish_year": 1881,
+        "title": "The Prince and the Pauper"
+    },
+    {
+        "id": "/works/OL471895W",
+        "author": "Agatha Christie",
+        "cover_img": "https://covers.openlibrary.org/b/id/12996560-L.jpg",
+        "first_publish_year": 1930,
+        "title": "The Murder at the Vicarage"
+    },
+    {
+        "id": "/works/OL262454W",
+        "author": "Arthur Conan Doyle",
+        "cover_img": "https://covers.openlibrary.org/b/id/8063264-L.jpg",
+        "first_publish_year": 1900,
+        "title": "The Hound of the Baskervilles"
+    },
+    {
+        "id": "/works/OL52114W",
+        "author": "H. G. Wells",
+        "cover_img": "https://covers.openlibrary.org/b/id/36314-L.jpg",
+        "first_publish_year": 1898,
+        "title": "The War of the Worlds"
+    },
+    {
+        "id": "/works/OL16312108W",
+        "author": "Kenneth Grahame",
+        "cover_img": "https://covers.openlibrary.org/b/id/8975054-L.jpg",
+        "first_publish_year": 1908,
+        "title": "The Wind in the Willows"
+    },
+    {
+        "id": "/works/OL3335245W",
+        "author": "J. D. Salinger",
+        "cover_img": "https://covers.openlibrary.org/b/id/9273490-L.jpg",
+        "first_publish_year": 1900,
+        "title": "The Catcher in the Rye"
+    },
+    {
+        "id": "/works/OL14942956W",
+        "author": "Jack London",
+        "cover_img": "https://covers.openlibrary.org/b/id/12393037-L.jpg",
+        "first_publish_year": 1903,
+        "title": "The Call of the Wild"
+    },
+    {
+        "id": "/works/OL276437W",
+        "author": "Henry James",
+        "cover_img": "https://covers.openlibrary.org/b/id/8237598-L.jpg",
+        "first_publish_year": 1898,
+        "title": "The Turn of the Screw"
+    },
+    {
+        "id": "/works/OL14933414W",
+        "author": "J.R.R. Tolkien",
+        "cover_img": "https://covers.openlibrary.org/b/id/8474036-L.jpg",
+        "first_publish_year": 1954,
+        "title": "The Fellowship of the Ring"
+    },
+    {
+        "id": "/works/OL1673205W",
+        "author": "Mario Puzo",
+        "cover_img": "https://covers.openlibrary.org/b/id/6507069-L.jpg",
+        "first_publish_year": 1969,
+        "title": "The Godfather"
+    },
+    {
+        "id": "/works/OL114967W",
+        "author": "Upton Sinclair",
+        "cover_img": "https://covers.openlibrary.org/b/id/8231790-L.jpg",
+        "first_publish_year": 1905,
+        "title": "The Jungle"
+    },
+    {
+        "id": "/works/OL45886W",
+        "author": "Roald Dahl",
+        "cover_img": "https://covers.openlibrary.org/b/id/12374442-L.jpg",
+        "first_publish_year": 1983,
+        "title": "The Witches"
+    },
+    {
+        "id": "/works/OL39316W",
+        "author": "Virginia Woolf",
+        "cover_img": "https://covers.openlibrary.org/b/id/119517-L.jpg",
+        "first_publish_year": 1931,
+        "title": "The Waves"
+    },
+    {
+        "id": "/works/OL45885W",
+        "author": "Roald Dahl",
+        "cover_img": "https://covers.openlibrary.org/b/id/9176033-L.jpg",
+        "first_publish_year": 1980,
+        "title": "The BFG"
+    }
+]
