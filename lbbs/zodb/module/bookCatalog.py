@@ -1,7 +1,7 @@
 import BTrees
 import persistent
 from .book import Book
-
+from .constant import BookStatus
 
 class BookCatalog(persistent.Persistent):
 
@@ -23,20 +23,26 @@ class BookCatalog(persistent.Persistent):
         self.__amount = 0
         self.__book_list = BTrees.IOBTree.IOBTree()
 
-    # TODO what ways to connect to db?
     @staticmethod
-    def search_book(keyword) -> Book:
-        pass
+    def search_book_catalog(root, keyword: str) -> list["BookCatalog"]:
+        """
+        require root of the zodb
+        """
+        lst = []
+        keyword = keyword.lower()
+        bookCatalogs = list(root.bookCatalog.values())
+        for catalog in bookCatalogs:
+            title = catalog.get_book_data()["title"].lower()
+            if keyword in title:
+                lst.append(catalog)
+        return lst
 
     def get_book_list(self) -> list[Book]:
-        """
-        return book list as [(unique_id, book_object), ...]
-        """
         return self.__book_list
 
     def get_book_data(self) -> dict:
         return {
-            "id": self.__id,
+            "book_id": self.__id,
             "title": self.__title,
             "genre": self.__genre,
             "author": self.__author,
@@ -91,6 +97,35 @@ class BookCatalog(persistent.Persistent):
         self.__author = author if author != None else self.__author
         self.__detail = detail if detail != None else self.__detail
         self.__cover = coverURL if coverURL != None else self.__cover
+
+    def get_available_for_reserve(self) -> Book:
+        """
+        return a book that has the closest expected that for reserve
+        """
+        lst = list(self.__book_list.items())
+        candidate_book = None
+        # find book that has status borrow and expected date is closest
+        for unique_id, book in lst:
+            status = book.get_book_data()["status"]
+            if status != BookStatus.BORROW:
+                continue
+            if candidate_book == None:
+                candidate_book = book
+                continue
+            if book.get_book_data()["expected_date"] < candidate_book.get_book_data()["expected_date"]:
+                candidate_book = book
+        return candidate_book
+
+    def is_available(self) -> bool:
+        """
+        return true if there is a available book for borrowing (not reserve)
+        """
+        lst = list(self.__book_list.items())
+        for unique_id, book in lst:
+            status = book.get_book_data()["status"]
+            if status == BookStatus.AVAILABLE:
+                return True
+        return False
 
     def __str__(self) -> str:
         return f"{self.__id}-{self.__title}"

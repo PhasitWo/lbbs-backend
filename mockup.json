@@ -1,0 +1,13 @@
+{
+    "docs": [
+        {
+            "book_id": 0,
+            "title": "The Fault in Our Stars",
+            "genre": "Romance",
+            "author": "Hazel Grace",
+            "cover": "sohappy.com/123sd123"
+        },
+        {...},
+        {...}
+    ]
+}

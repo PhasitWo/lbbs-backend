@@ -1,17 +1,21 @@
 from datetime import date, timedelta
-from enum import Enum
 from .constant import BookStatus, BorrowStatus
+from .bookCatalog import BookCatalog
 from .book import Book
 from .member import Member
 import persistent
 
+
 # TODO how to check if this reservation is void (does not borrow within expected date) -> use lib called 'schedule'
 class Borrowing(persistent.Persistent):
-    def __init__(self, borrow_id: int, book: Book, member: Member) -> None:
+    def __init__(
+        self, borrow_id: int, member: Member, book_catalog: BookCatalog, book: Book
+    ) -> None:
         self.__id = borrow_id
-        self.__book = book
         self.__member = member
         self.__member.add_borrowing(self)
+        self.__book_catalog = book_catalog
+        self.__book = book
         self.__status = None
         # Reserve
         self.__reserve_date = None
@@ -21,11 +25,21 @@ class Borrowing(persistent.Persistent):
         self.__return_date = None
         self.__fine = 0.0
 
-    # TODO what ways to connect to db?
     @staticmethod
-    def search_borrowing(keyword) -> list["Borrowing"]:
-        pass
-
+    def search_borrowing(root, keyword:int) -> list["Borrowing"]:
+        """
+        require root of the zodb
+        """
+        lst = []
+        all_borrowing = list(root.borrowing.values())
+        for borrowing in all_borrowing:
+            borrow_id = borrowing.get_borrow_detail()["borrow_id"]
+            member_id = borrowing.get_borrow_detail()["member"].get_id()
+            print(borrow_id, member_id)
+            if keyword == borrow_id or keyword == member_id:
+                lst.append(borrowing)
+        return lst
+    
     def start_reserve(self) -> int:
         """
         Return 1 if the reserve attempt succeed, or 0 otherwise.
@@ -51,7 +65,7 @@ class Borrowing(persistent.Persistent):
         return 1
 
     def calculate_fine(self) -> float:
-        FINE_PER_DAY = 100.0  # TODO clarify policy
+        FINE_PER_DAY = 5.0  # TODO clarify policy
         day_exceed = max(0, (self.__return_date - self.__due_date).days)
         return FINE_PER_DAY * day_exceed
 
@@ -64,9 +78,10 @@ class Borrowing(persistent.Persistent):
 
     def get_borrow_detail(self) -> dict:
         return {
-            "id": self.__id,
-            "book": self.__book,
+            "borrow_id": self.__id,
             "member": self.__member,
+            "book_catalog": self.__book_catalog,
+            "book": self.__book,
             "status": self.__status,
             "reserve_date": self.__reserve_date,
             "expected_date": self.__book.get_book_data()["expected_date"],

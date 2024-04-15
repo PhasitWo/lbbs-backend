@@ -17,3 +17,9 @@ class User(persistent.Persistent):
         if inp_psw == self._password:
             return True
         return False
+
+    def get_id(self) -> int:
+        return self._user_id
+    
+    def get_name(self) -> str:
+        return self._name

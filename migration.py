@@ -12,23 +12,22 @@ from lbbs.zodb.module.member import Member
 connection = ZODB.connection("lbbs/zodb/db.fs")
 root = connection.root
 
-# with open("data.json", "r") as openfile:
-#     data = json.load(openfile)
-#     for index, item in enumerate(data):
-#         b = BookCatalog(index+2, item["title"], None, item["author"], None, item["cover_img"])
-#         root.bookCatalog.insert(index+2, b)
 
-lst = list(root.bookCatalog.items())
-for item in lst:
-    index, obj = item
-    b = Book(index)
-    obj.add_book_by_object(b)
-    root.book.insert(index, b)
+member = root.member.get(0)
+catalog = root.bookCatalog.get(0)
+book = root.book.get(0)
+b = Borrowing(5, member, catalog, book)
+root.borrowing.insert(5, b)
 
+transaction.commit()
+# catalog: BookCatalog = root.bookCatalog.get(2)
+# b = Book(300, BookStatus.BORROW)
+# b.set_expected_date(date(2024,1,1))
+# f = Book(400, BookStatus.BORROW)
+# f.set_expected_date(date(2025,1,1))
+# catalog.add_book_by_object(b)
+# catalog.add_book_by_object(f)
 
-# root.bookCatalog = BTrees.IOBTree.IOBTree()
-# root.book = BTrees.IOBTree.IOBTree()
-# root.member = BTrees.IOBTree.IOBTree()
 
 # root.member.insert(1, Member(1, "1234", "JOHN", "Student"))
 # new_catalog = BookCatalog(
@@ -38,6 +37,3 @@ for item in lst:
 # new_book = Book(123)
 # root.book.insert(123, new_book)
 # new_catalog.add_book_by_object(new_book)
-
-
-transaction.commit()

@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8000/bookCatalog/21
+GET http://127.0.0.1:8000/book?title=king
 Content-Type: application/json
 
 ###
