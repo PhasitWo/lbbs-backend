@@ -1,3 +1,8 @@
+GET http://127.0.0.1:8000/book/100
+Content-Type: application/json
+
+###
+
 GET http://127.0.0.1:8000/borrowing?id=6
 Content-Type: application/json
 
@@ -8,7 +13,7 @@ Content-Type: application/json
 
 {
     "member_id": 0,
-    "unique_id": 0
+    "unique_id": 1
 }
 
 
@@ -20,4 +25,66 @@ Content-Type: application/json
 {
     "borrow_id": 6,
     "status": "return"
+}
+
+###
+
+POST http://127.0.0.1:8000/edit-book
+Content-Type: application/json
+
+{
+        "book_id": 0,
+        "title": "The Fault in Ours Stars",
+        "genre": "Comedy",
+        "author": "John Chowrai",
+        "detail": "bra..brabra.."
+}
+
+
+###
+
+POST http://127.0.0.1:8000/add-book
+Content-Type: application/json
+
+{
+        "book_id": 0,
+        "title": "",
+        "genre": null,
+        "author": "author morgan",
+        "detail": "description bra bra bra",
+        "coverUrl": "www.asdas../asdaasd"
+ }
+
+###
+GET http://127.0.0.1:8000/add-unique
+Content-Type: application/json
+
+ {
+	"book_id" : 0,
+	"unique_id" : 62
+ }
+
+###
+GET http://127.0.0.1:8000/member-data
+Content-Type: application/json
+
+ {
+    "member_id":0
+ }
+
+###
+GET http://127.0.0.1:8000/member-borrowing
+Content-Type: application/json
+
+{
+    "member_id":0
+}	
+
+###
+POST http://127.0.0.1:8000/member-borrowing/create
+Content-Type: application/json
+
+{
+    "member_id": 0,
+    "unique_id": 15
 }

@@ -80,7 +80,7 @@ class BookCatalog(persistent.Persistent):
             self.__amount -= 1
         return ret
 
-    def edit_book(
+    def edit(
         self,
         title: str = None,
         genre: str = None,

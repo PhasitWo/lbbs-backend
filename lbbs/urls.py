@@ -25,5 +25,11 @@ urlpatterns = [
     path("book/<int:id>", views.get_book_detail),
     path("borrowing", views.get_borrowing),
     path("borrowing/set-status", views.set_borrowing_status),
-    path("borrowing/create", views.create_borrowing)
+    path("borrowing/create", views.create_borrowing),
+    path("edit-book", views.edit_book_catalog),
+    path("add-book", views.add_book_catalog),
+    path("add-unique", views.add_book),
+    path("member-data", views.get_member_data),
+    path("member-borrowing", views.get_member_borrowing),
+    path("member-borrowing/create", views.create_reserve_borrowing),
 ]
