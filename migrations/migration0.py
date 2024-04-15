@@ -15,6 +15,8 @@ root = connection.root
 root.bookCatalog = BTrees.IOBTree.IOBTree()
 root.book = BTrees.IOBTree.IOBTree()
 root.member = BTrees.IOBTree.IOBTree()
+root.borrowing = BTrees.IOBTree.IOBTree()
+
 
 with open("data.json", "r") as openfile:
     data = json.load(openfile)
@@ -37,3 +39,5 @@ for catalog in list(root.bookCatalog.values()):
         root.book.insert(new_id, b)
 
 root.member.insert(0, Member(0, "test", "John", "student"))
+
+transaction.commit()

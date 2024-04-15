@@ -86,8 +86,8 @@ def get_borrowing(request):
             {
                 "borrow_id": data["borrow_id"],
                 "member_id": data["member"].get_id(),
-                "book_title": data["book_catalog"].get_book_data()["title"],
                 "unique_id": data["book"].get_book_data()["unique_id"],
+                "book_title": data["book_catalog"].get_book_data()["title"],
                 "reserve_date": (
                     data["reserve_date"].strftime("%d/%m/%Y")
                     if data["reserve_date"]
@@ -101,6 +101,16 @@ def get_borrowing(request):
                 "borrow_date": (
                     data["borrow_date"].strftime("%d/%m/%Y")
                     if data["borrow_date"]
+                    else None
+                ),
+                "due_date": (
+                    data["due_date"].strftime("%d/%m/%Y")
+                    if data["due_date"]
+                    else None
+                ),
+                "return_date": (
+                    data["return_date"].strftime("%d/%m/%Y")
+                    if data["return_date"]
                     else None
                 ),
                 "borrow_status": data["status"].value if data["status"] else None,
@@ -316,6 +326,14 @@ def get_member_borrowing(request):
                 "borrow_date": (
                     data["borrow_date"].strftime("%d/%m/%Y")
                     if data["borrow_date"]
+                    else None
+                ),
+                "due_date": (
+                    data["due_date"].strftime("%d/%m/%Y") if data["due_date"] else None
+                ),
+                "return_date": (
+                    data["return_date"].strftime("%d/%m/%Y")
+                    if data["return_date"]
                     else None
                 ),
                 "borrow_status": data["status"].value if data["status"] else None,
