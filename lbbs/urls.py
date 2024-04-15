@@ -21,8 +21,9 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("login", views.login),
-    path("test/<int:id>", views.test),
     path("book", views.get_book),
-    path("book/<int:id>", views.get_book_detail)
+    path("book/<int:id>", views.get_book_detail),
+    path("borrowing", views.get_borrowing),
+    path("borrowing/set-status", views.set_borrowing_status),
+    path("borrowing/create", views.create_borrowing)
 ]

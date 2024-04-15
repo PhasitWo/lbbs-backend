@@ -39,7 +39,7 @@ class Borrowing(persistent.Persistent):
             if keyword == borrow_id or keyword == member_id:
                 lst.append(borrowing)
         return lst
-    
+
     def start_reserve(self) -> int:
         """
         Return 1 if the reserve attempt succeed, or 0 otherwise.
@@ -75,6 +75,10 @@ class Borrowing(persistent.Persistent):
         self.__fine = self.calculate_fine()
         self.__book.set_status(BookStatus.AVAILABLE)
         self.__book.set_expected_date(None)
+
+    def cancel_reserve(self) -> None:
+        self.__status = BorrowStatus.CANCEL
+        self.__book.set_status(BookStatus.BORROW)
 
     def get_borrow_detail(self) -> dict:
         return {

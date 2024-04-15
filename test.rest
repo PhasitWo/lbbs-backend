@@ -1,12 +1,15 @@
-GET http://127.0.0.1:8000/book?title=king
+GET http://127.0.0.1:8000/book/0
 Content-Type: application/json
 
 ###
 
-POST http://127.0.0.1:8000/login 
+POST http://127.0.0.1:8000/borrowing/set-status
 Content-Type: application/json
 
-{ "username": "adam", "password": "Pass1234!" }
+{
+    "borrow_id": 2,
+    "status": "borrow/return/cancel"
+}
 
 
 # GET http://127.0.0.1:8000/test_token 
