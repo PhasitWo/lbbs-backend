@@ -1,5 +1,16 @@
-GET http://127.0.0.1:8000/book/0
+GET http://127.0.0.1:8000/borrowing?id=6
 Content-Type: application/json
+
+###
+
+POST http://127.0.0.1:8000/borrowing/create
+Content-Type: application/json
+
+{
+    "member_id": 0,
+    "unique_id": 0
+}
+
 
 ###
 
@@ -7,11 +18,6 @@ POST http://127.0.0.1:8000/borrowing/set-status
 Content-Type: application/json
 
 {
-    "borrow_id": 2,
-    "status": "borrow/return/cancel"
+    "borrow_id": 6,
+    "status": "return"
 }
-
-
-# GET http://127.0.0.1:8000/test_token 
-# Content-Type: application/json
-# Authorization: token xxx

@@ -6,8 +6,9 @@ from zodb.module.constant import BookStatus
 from zodb.module.borrowing import Borrowing
 from zodb.module.member import Member
 
-# connection = ZODB.connection("lbbs/zodb/db.fs")
-# root = connection.root
+my_transaction_manager = transaction.TransactionManager()
+db = ZODB.DB("lbbs/zodb/db.fs")
+connection = db.open(my_transaction_manager)
+root = connection.root
 
-
-
+print(root.x)

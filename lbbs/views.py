@@ -7,7 +7,9 @@ from .zodb.module.borrowing import Borrowing
 import ZODB
 import transaction
 
-connection = ZODB.connection("lbbs/zodb/db.fs")
+transaction_manager = transaction.TransactionManager()
+db = ZODB.DB("lbbs/zodb/db.fs")
+connection = db.open(transaction_manager)
 root = connection.root
 
 
@@ -96,7 +98,7 @@ def get_borrowing(request):
                     if data["borrow_date"]
                     else None
                 ),
-                "borrow_status": data["status"],
+                "borrow_status": data["status"].value if data["status"] else None,
                 "fine": data["fine"],
             }
         )
@@ -119,15 +121,18 @@ def create_borrowing(request):
     bookCatalogs = list(root.bookCatalog.values())
     target_catalog = None
     for catalog in bookCatalogs:
-        if bookCatalogs.get_book_list().get(unique_id):
+        if catalog.get_book_list().get(unique_id):
             target_catalog = catalog
             break
     if not target_catalog:
         return Response({"error": "this book not belong to any catalog"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    new_id = root.borrowing.maxKey() if len(root.borrowing) else 0
+    new_id = root.borrowing.maxKey() + 1 if len(root.borrowing) else 0
     new_borrowing = Borrowing(new_id, member, target_catalog, book)
+    completed = new_borrowing.start_borrow()
+    if not completed:
+        return Response({"error": "this book is not available for borrowing"}, status=status.HTTP_400_BAD_REQUEST)
     root.borrowing.insert(new_id, new_borrowing)
-    transaction.commit()
+    transaction_manager.commit()
     return Response(status=status.HTTP_201_CREATED)
 
 @api_view(["POST"])
@@ -152,7 +157,7 @@ def set_borrowing_status(request):
                 {"error": "This book is not available"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        transaction.commit()
+        transaction_manager.commit()
     elif s == "return":
         if current_status != "borrow":
             return Response(
@@ -160,7 +165,7 @@ def set_borrowing_status(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         borrowing.return_book()
-        transaction.commit()
+        transaction_manager.commit()
     elif s == "cancel":
         if current_status != "reserve":
             return Response(
@@ -168,7 +173,8 @@ def set_borrowing_status(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         borrowing.cancel_reserve()
-        transaction.commit()
+        transaction_manager.commit()
     else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error" : "invalid status"},status=status.HTTP_400_BAD_REQUEST)
     return Response(status=status.HTTP_200_OK)
+
