@@ -6,6 +6,9 @@ from .zodb.module.bookCatalog import BookCatalog
 from .zodb.module.book import Book
 from .zodb.module.borrowing import Borrowing
 from .zodb.module.constant import BorrowStatus
+from .zodb.module.member import Member
+import jwt
+from functools import wraps
 import ZODB
 import transaction
 
@@ -15,17 +18,54 @@ connection = db.open(transaction_manager)
 root = connection.root
 
 
-# def my_decor(func: function):
-#     def wrapper(*args, **kwargs):
-#         request = args[0]
-#         if not request.query_params.get("title"):
-#             Response(status=status.HTTP_400_BAD_REQUEST)
-#         return func(*args, **kwargs)
+def authenticate(permission_classes: list):
+    def inner(func):
+        @wraps(func)
+        def wrapper(request, *args, **kwargs):
+            header_token = request.headers.get("Authorization")
+            # check if token exists
+            if not header_token:
+                return Response(
+                    {"error": "no token"}, status=status.HTTP_401_UNAUTHORIZED
+                )
+            token = header_token.split(" ")[1]
+            # check if token expired
+            try:
+                token_payload = jwt.decode(
+                    token, "sample_secret_key", algorithms="HS256"
+                )
+            except jwt.ExpiredSignatureError:
+                return Response(
+                    {"error": "token expired"}, status=status.HTTP_401_UNAUTHORIZED
+                )
+            # check token permission
+            if token_payload["permission"] not in permission_classes:
+                return Response(
+                    {"error": f"no permission, only {permission_classes} allowed"}, status=status.HTTP_401_UNAUTHORIZED
+                )
+            return func(request, token_payload, *args, **kwargs)
+        return wrapper
+    return inner
 
-#     return wrapper
+
+@api_view(["GET"])
+@authenticate(["librarian"])
+def test(request, token_payload):
+    print(token_payload)
+    return Response(status=status.HTTP_200_OK)
 
 
-# @my_decor
+@api_view(["POST"])
+def member_login(request):
+    username = request.data["username"]
+    password = request.data["password"]
+    token = Member.authenticate(root, username, password)
+    if not token:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+    return Response({"access_token": token}, status=status.HTTP_200_OK)
+
+
+# @authenticate
 @api_view(["GET"])
 def get_book(request):
     q = request.query_params.get("title")
@@ -104,9 +144,7 @@ def get_borrowing(request):
                     else None
                 ),
                 "due_date": (
-                    data["due_date"].strftime("%d/%m/%Y")
-                    if data["due_date"]
-                    else None
+                    data["due_date"].strftime("%d/%m/%Y") if data["due_date"] else None
                 ),
                 "return_date": (
                     data["return_date"].strftime("%d/%m/%Y")
@@ -361,7 +399,10 @@ def create_reserve_borrowing(request):
             and data["book"].get_book_data()["unique_id"] == unique_id
         ):
             return Response(
-                {"error": "this member is borrowing this book, reservation is not allowed"}, status=status.HTTP_400_BAD_REQUEST
+                {
+                    "error": "this member is borrowing this book, reservation is not allowed"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
     book = root.book.get(unique_id)
     if not book:

@@ -1,3 +1,17 @@
+GET http://127.0.0.1:8000/test
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTM4MDYzMDgsIm1lbWJlcl9pZCI6MCwicGVybWlzc2lvbiI6Im1lbWJlciJ9.JEKkvU2YLQUjntwwp3aJy5G2MjnIOrJeDevfaN8RKBM
+
+###
+POST http://127.0.0.1:8000/member/login
+Content-Type: application/json
+
+{
+    "username": "John",
+    "password": "test"
+}
+###
+
 GET http://127.0.0.1:8000/book/0
 Content-Type: application/json
 

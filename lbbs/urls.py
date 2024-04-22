@@ -32,4 +32,6 @@ urlpatterns = [
     path("member-data", views.get_member_data),
     path("member-borrowing", views.get_member_borrowing),
     path("member-borrowing/create", views.create_reserve_borrowing),
+    path("member/login", views.member_login),
+    path("test", views.test)
 ]

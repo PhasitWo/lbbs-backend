@@ -1,7 +1,36 @@
+import datetime
+
+import jwt
 from .user import User
 
 
 class Librarian(User):
-    # TODO should we add anything to make this class different from the super class?
+    @staticmethod
+    def authenticate(root, username: str, password: str) -> str:
+        """
+        require root of the zodb
+        return str of access token if username and password is matched, otherwise return None
+        """
+        librarian_lst = list(root.librarian.values())
+        for librarian in librarian_lst:
+            if username == librarian.get_name():
+                is_auth = librarian.verify(password)
+                if is_auth:
+                    KEY = "sample_secret_key"
+                    ACCESS_DURATION = 8
+                    token = jwt.encode(
+                        {
+                            "exp": datetime.datetime.now(tz=datetime.timezone.utc)
+                            + datetime.timedelta(hours=ACCESS_DURATION),
+                            "librarian_id": librarian.get_id(),
+                            "permission": "librarian",
+                        },
+                        KEY,
+                        algorithm="HS256",
+                    )
+                    return token
+                break
+        return None
+
     def __str__(self) -> str:
         return f"Librarian-{self._user_id}-{self._name}"

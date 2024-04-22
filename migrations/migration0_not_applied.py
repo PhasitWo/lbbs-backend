@@ -38,6 +38,9 @@ for catalog in list(root.bookCatalog.values()):
         catalog.add_book_by_object(b)
         root.book.insert(new_id, b)
 
-root.member.insert(0, Member(0, "test", "John", "student"))
+root.member.insert(0, Member(0, "test_member0", "test_member0", "student"))
+root.member.insert(1, Member(1, "test_member1", "test_member1", "student"))
+root.member.insert(2, Member(2, "test_member2", "test_member2", "student"))
+root.member.insert(3, Member(3, "test_member3", "test_member3", "student"))
 
 transaction.commit()
