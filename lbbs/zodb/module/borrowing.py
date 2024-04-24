@@ -65,7 +65,7 @@ class Borrowing(persistent.Persistent):
         return 1
 
     def calculate_fine(self) -> float:
-        FINE_PER_DAY = 5.0  # TODO clarify policy
+        FINE_PER_DAY = 5.0
         day_exceed = max(0, (self.__return_date - self.__due_date).days)
         return FINE_PER_DAY * day_exceed
 

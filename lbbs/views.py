@@ -49,7 +49,7 @@ def authenticate(permission_classes: list):
 
 
 @api_view(["GET"])
-@authenticate(["librarian"])
+@authenticate(["member", "librarian"])
 def test(request, token_payload):
     print(token_payload)
     return Response(status=status.HTTP_200_OK)
@@ -310,8 +310,9 @@ def add_book(request):
 
 
 @api_view(["GET"])
-def get_member_data(request):
-    member_id = request.data["member_id"]
+@authenticate(["member"])
+def get_member_data(request, token_payload):
+    member_id = token_payload["member_id"]
     member = root.member.get(member_id)
     if not member:
         return Response(
@@ -332,7 +333,7 @@ def get_member_data(request):
         {"borrow_count": borrow_count, "reserve_count": reserve_count, "fine": fine}
     )
 
-
+# FIXME require auth
 @api_view(["GET"])
 def get_member_borrowing(request):
     member_id = request.data["member_id"]
@@ -380,7 +381,7 @@ def get_member_borrowing(request):
         )
     return Response({"borrowing_list": res})
 
-
+# FIXME require auth
 @api_view(["POST"])
 def create_reserve_borrowing(request):
     member_id = request.data["member_id"]
