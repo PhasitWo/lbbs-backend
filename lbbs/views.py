@@ -59,10 +59,10 @@ def test(request, token_payload):
 def member_login(request):
     username = request.data["username"]
     password = request.data["password"]
-    token = Member.authenticate(root, username, password)
+    member_id, member_name, token = Member.authenticate(root, username, password)
     if not token:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    return Response({"access_token": token}, status=status.HTTP_200_OK)
+    return Response({"member_name" : member_name, "member_id": member_id,"access_token": token}, status=status.HTTP_200_OK)
 
 
 # @authenticate
@@ -104,9 +104,13 @@ def get_book_detail(request, id=None):
             )
         else:
             res.update({"unique_id": None, "expected_date": None})
+        unique_lst = list(catalog.get_book_list().values())
+        unique_lst = [u.get_book_data()["unique_id"] for u in unique_lst]
+        print(unique_lst)
         res.update(
             {
                 "available": catalog.is_available(),
+                "docs" : unique_lst
             }
         )
         return Response(res)

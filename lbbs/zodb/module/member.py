@@ -14,7 +14,7 @@ class Member(User):
         self._borrow_list = persistent.list.PersistentList()
 
     @staticmethod
-    def authenticate(root, username: str, password: str) -> str:
+    def authenticate(root, username: str, password: str) -> tuple:
         """
         require root of the zodb
         return str of access token if username and password is matched, otherwise return None
@@ -36,7 +36,7 @@ class Member(User):
                         KEY,
                         algorithm="HS256",
                     )
-                    return token
+                    return member.get_id(), member.get_name(), token
                 break
         return None
 
