@@ -12,12 +12,12 @@ Content-Type: application/json
 }
 ###
 
-GET http://127.0.0.1:8000/book/1
+GET http://127.0.0.1:8000/book/62
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/borrowing?id=2
+GET http://127.0.0.1:8000/borrowing?id=
 Content-Type: application/json
 
 ###
@@ -81,17 +81,19 @@ Content-Type: application/json
 ###
 GET http://127.0.0.1:8000/member-data
 Content-Type: application/json
+Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwNTc5MDIsIm1lbWJlcl9pZCI6MCwicGVybWlzc2lvbiI6Im1lbWJlciJ9.6UJ0mpgcJMDl5u5CPTNoMyk0db2vGlVrZzKw54ATvs0'
 
  {
-    "member_id":0
+
  }
 
 ###
 GET http://127.0.0.1:8000/member-borrowing
 Content-Type: application/json
+Authorization: 'bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTQwNTc5MDIsIm1lbWJlcl9pZCI6MCwicGVybWlzc2lvbiI6Im1lbWJlciJ9.6UJ0mpgcJMDl5u5CPTNoMyk0db2vGlVrZzKw54ATvs0'
 
 {
-    "member_id":0
+    "unique_id":62
 }	
 
 ###

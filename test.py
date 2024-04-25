@@ -14,4 +14,8 @@ db = ZODB.DB("lbbs/zodb/db.fs")
 connection = db.open(my_transaction_manager)
 root = connection.root
 
-print(root.book.get(62))
+# root.member.insert(1, Member(1, "test_member1", "test_member1", "student"))
+# root.member.insert(2, Member(2, "test_member2", "test_member2", "student"))
+# root.member.insert(3, Member(3, "test_member3", "test_member3", "student"))
+
+# my_transaction_manager.commit()

@@ -126,16 +126,18 @@ def get_book_detail(request, id=None):
 @api_view(["GET"])
 def get_borrowing(request):
     q = request.query_params.get("id")
-    if not q:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
     lst = []
-    result = Borrowing.search_borrowing(root, int(q))
+    if q == "":
+        result = list(root.borrowing.values())
+    else:
+        result = Borrowing.search_borrowing(root, int(q))
     for borrowing in result:
         data = borrowing.get_borrow_detail()
         lst.append(
             {
                 "borrow_id": data["borrow_id"],
                 "member_id": data["member"].get_id(),
+                "member_name": data["member"].get_name(),
                 "unique_id": data["book"].get_book_data()["unique_id"],
                 "book_title": data["book_catalog"].get_book_data()["title"],
                 "reserve_date": (
@@ -270,6 +272,7 @@ def edit_book_catalog(request):
 
 @api_view(["POST"])
 def add_book_catalog(request):
+    print(request.data)
     book_id = request.data["book_id"]
     title = request.data["title"]
     if not title or title == "":
@@ -392,18 +395,22 @@ def get_member_borrowing(request, token_payload):
         )
     return Response({"borrowing_list": res})
 
+
 # FIXME require auth
 @api_view(["POST"])
-def create_reserve_borrowing(request):
-    member_id = request.data["member_id"]
+@authenticate(["member"])
+def create_reserve_borrowing(request, token_payload):
+    member_id = token_payload["member_id"]
     unique_id = request.data["unique_id"]
     member = root.member.get(member_id)
+    print(1)
     if not member:
         return Response(
             {"error": "no member found"}, status=status.HTTP_400_BAD_REQUEST
         )
     # check if this member is borrowing this book
     lst = member.get_borrow_list()
+    print(2)
     for borrowing in lst:
         data = borrowing.get_borrow_detail()
         if (
@@ -417,6 +424,7 @@ def create_reserve_borrowing(request):
                 status=status.HTTP_400_BAD_REQUEST,
             )
     book = root.book.get(unique_id)
+    print(3)
     if not book:
         return Response({"error": "no book found"}, status=status.HTTP_400_BAD_REQUEST)
     # can be optimized
@@ -426,6 +434,7 @@ def create_reserve_borrowing(request):
         if catalog.get_book_list().get(unique_id):
             target_catalog = catalog
             break
+    print(4)
     if not target_catalog:
         return Response(
             {"error": "this book not belong to any catalog"},
@@ -434,6 +443,7 @@ def create_reserve_borrowing(request):
     new_id = root.borrowing.maxKey() + 1 if len(root.borrowing) else 0
     new_borrowing = Borrowing(new_id, member, target_catalog, book)
     completed = new_borrowing.start_reserve()
+    print(5)
     if not completed:
         transaction_manager.abort()
         return Response(
