@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+
+from .zodb.module.librarian import Librarian
 from .zodb.module.bookCatalog import BookCatalog
 from .zodb.module.book import Book
 from .zodb.module.borrowing import Borrowing
@@ -59,10 +61,14 @@ def test(request, token_payload):
 def member_login(request):
     username = request.data["username"]
     password = request.data["password"]
-    member_id, member_name, token = Member.authenticate(root, username, password)
+    is_admin = False
+    user_id, user_name, token = Member.authenticate(root, username, password)
+    if user_id == None:
+        is_admin = True
+        user_id, user_name, token = Librarian.authenticate(root, username, password)
     if not token:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    return Response({"member_name" : member_name, "member_id": member_id,"access_token": token}, status=status.HTTP_200_OK)
+    return Response({"user_name" : user_name, "user_id": user_id, "is_admin": is_admin,"access_token": token}, status=status.HTTP_200_OK)
 
 
 # @authenticate
@@ -339,8 +345,9 @@ def get_member_data(request, token_payload):
 
 # FIXME require auth
 @api_view(["GET"])
-def get_member_borrowing(request):
-    member_id = request.data["member_id"]
+@authenticate(["member"])
+def get_member_borrowing(request, token_payload):
+    member_id = token_payload["member_id"]
     member = root.member.get(member_id)
     if not member:
         return Response(

@@ -38,7 +38,7 @@ class Member(User):
                     )
                     return member.get_id(), member.get_name(), token
                 break
-        return None
+        return None, None, None
 
     def get_borrow_list(self) -> list:
         return self._borrow_list.copy()

@@ -28,9 +28,9 @@ class Librarian(User):
                         KEY,
                         algorithm="HS256",
                     )
-                    return token
+                    return librarian.get_id(), librarian.get_name(), token
                 break
-        return None
+        return None, None, None
 
     def __str__(self) -> str:
         return f"Librarian-{self._user_id}-{self._name}"

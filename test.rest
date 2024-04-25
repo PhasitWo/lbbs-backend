@@ -12,12 +12,12 @@ Content-Type: application/json
 }
 ###
 
-GET http://127.0.0.1:8000/book/0
+GET http://127.0.0.1:8000/book/1
 Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/borrowing?id=0
+GET http://127.0.0.1:8000/borrowing?id=2
 Content-Type: application/json
 
 ###
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 {
     "member_id": 0,
-    "unique_id": 20
+    "unique_id": 62
 }
 
 
@@ -62,7 +62,7 @@ Content-Type: application/json
 
 {
         "book_id": null,
-        "title": "abc",
+        "title": "check reserve button",
         "genre": null,
         "author": "author morgan",
         "detail": "description bra bra bra",
@@ -74,7 +74,7 @@ GET http://127.0.0.1:8000/add-unique
 Content-Type: application/json
 
  {
-	"book_id" : 20,
+	"book_id" : 21,
 	"unique_id" : null
  }
 
