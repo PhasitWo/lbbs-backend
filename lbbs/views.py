@@ -205,7 +205,7 @@ def create_borrowing(request):
         )
     root.borrowing.insert(new_id, new_borrowing)
     transaction_manager.commit()
-    return Response(status=status.HTTP_201_CREATED)
+    return Response({"borrow_id": new_id},status=status.HTTP_201_CREATED)
 
 
 @api_view(["POST"])
