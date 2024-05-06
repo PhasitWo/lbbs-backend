@@ -26,7 +26,7 @@ class Borrowing(persistent.Persistent):
         self.__fine = 0.0
 
     @staticmethod
-    def search_borrowing(root, keyword:int) -> list["Borrowing"]:
+    def search_borrowing(root, keyword: int) -> list["Borrowing"]:
         """
         require root of the zodb
         """
@@ -55,7 +55,10 @@ class Borrowing(persistent.Persistent):
         """
         Return 1 if the borrow attempt succeed, or 0 otherwise.
         """
-        if self.__book.get_book_data()["status"] != BookStatus.AVAILABLE:
+        if (
+            self.__book.get_book_data()["status"] != BookStatus.AVAILABLE
+            or self.__book.get_book_data()["status"] != BookStatus.WAIT
+        ):
             return 0
         self.__borrow_date = date.today()
         self.__due_date = self.__borrow_date + timedelta(days=7)
@@ -71,9 +74,12 @@ class Borrowing(persistent.Persistent):
 
     def return_book(self) -> None:
         self.__return_date = date.today()
-        self.__status = BorrowStatus.RETURN
         self.__fine = self.calculate_fine()
-        self.__book.set_status(BookStatus.AVAILABLE)
+        self.__status = BorrowStatus.RETURN
+        if self.__book.get_book_data()["status"] == BookStatus.BORROW:
+            self.__book.set_status(BookStatus.AVAILABLE)
+        elif self.__book.get_book_data()["status"] == BookStatus.RESERVE:
+            self.__book.set_status(BookStatus.WAIT)
         self.__book.set_expected_date(None)
 
     def cancel_reserve(self) -> None:

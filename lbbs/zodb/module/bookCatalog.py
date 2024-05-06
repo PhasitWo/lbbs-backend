@@ -70,15 +70,9 @@ class BookCatalog(persistent.Persistent):
             self.__amount += 1
         return ret
 
-    def remove_book(self, unique_id: int) -> int:
-        """
-        Return 1 if the item was removed, or 0 otherwise.
-        """
-        ret = self.__book_list.pop(unique_id, 0)
-        ret = 1 if ret else ret
-        if ret:
-            self.__amount -= 1
-        return ret
+    def remove_book(self, unique_id: int) -> None:
+        unique_book = self.__book_list.get(unique_id)
+        unique_book.set_status(BookStatus.REMOVED)
 
     def edit(
         self,

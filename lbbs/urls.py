@@ -29,9 +29,10 @@ urlpatterns = [
     path("edit-book", views.edit_book_catalog),
     path("add-book", views.add_book_catalog),
     path("add-unique", views.add_book),
+    path("remove-unique", views.remove_book),
     path("member-data", views.get_member_data),
     path("member-borrowing", views.get_member_borrowing),
     path("member-borrowing/create", views.create_reserve_borrowing),
-    path("member/login", views.member_login),
+    path("member/login", views.login),
     path("test", views.test)
 ]

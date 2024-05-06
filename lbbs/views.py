@@ -7,7 +7,7 @@ from .zodb.module.librarian import Librarian
 from .zodb.module.bookCatalog import BookCatalog
 from .zodb.module.book import Book
 from .zodb.module.borrowing import Borrowing
-from .zodb.module.constant import BorrowStatus
+from .zodb.module.constant import BookStatus, BorrowStatus
 from .zodb.module.member import Member
 import jwt
 from functools import wraps
@@ -43,10 +43,13 @@ def authenticate(permission_classes: list):
             # check token permission
             if token_payload["permission"] not in permission_classes:
                 return Response(
-                    {"error": f"no permission, only {permission_classes} allowed"}, status=status.HTTP_401_UNAUTHORIZED
+                    {"error": f"no permission, only {permission_classes} allowed"},
+                    status=status.HTTP_401_UNAUTHORIZED,
                 )
             return func(request, token_payload, *args, **kwargs)
+
         return wrapper
+
     return inner
 
 
@@ -58,7 +61,7 @@ def test(request, token_payload):
 
 
 @api_view(["POST"])
-def member_login(request):
+def login(request):
     username = request.data["username"]
     password = request.data["password"]
     is_admin = False
@@ -68,11 +71,19 @@ def member_login(request):
         user_id, user_name, token = Librarian.authenticate(root, username, password)
     if not token:
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-    return Response({"user_name" : user_name, "user_id": user_id, "is_admin": is_admin,"access_token": token}, status=status.HTTP_200_OK)
+    return Response(
+        {
+            "user_name": user_name,
+            "user_id": user_id,
+            "is_admin": is_admin,
+            "access_token": token,
+        },
+        status=status.HTTP_200_OK,
+    )
 
 
-# @authenticate
 @api_view(["GET"])
+@authenticate(["member", "librarian"])
 def get_book(request):
     q = request.query_params.get("title")
     if not q:
@@ -94,6 +105,7 @@ def get_book(request):
 
 
 @api_view(["GET"])
+@authenticate(["member", "librarian"])
 def get_book_detail(request, id=None):
     catalog = root.bookCatalog.get(id)
     if catalog:
@@ -113,17 +125,13 @@ def get_book_detail(request, id=None):
         unique_lst = list(catalog.get_book_list().values())
         unique_lst = [u.get_book_data()["unique_id"] for u in unique_lst]
         print(unique_lst)
-        res.update(
-            {
-                "available": catalog.is_available(),
-                "docs" : unique_lst
-            }
-        )
+        res.update({"available": catalog.is_available(), "docs": unique_lst})
         return Response(res)
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["GET"])
+@authenticate(["librarian"])
 def get_borrowing(request):
     q = request.query_params.get("id")
     lst = []
@@ -171,6 +179,7 @@ def get_borrowing(request):
 
 
 @api_view(["POST"])
+@authenticate(["librarian"])
 def create_borrowing(request):
     member_id = request.data["member_id"]
     unique_id = request.data["unique_id"]
@@ -194,6 +203,13 @@ def create_borrowing(request):
             {"error": "this book not belong to any catalog"},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
+    # BLOCK BY BookStatus.WAIT
+    unique_book = target_catalog.get_book_list().get(unique_id)
+    if unique_book.get_book_data()["status"] == BookStatus.WAIT:
+        return Response(
+            {"error": "this book is waiting to be borrowed by the other"},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     new_id = root.borrowing.maxKey() + 1 if len(root.borrowing) else 0
     new_borrowing = Borrowing(new_id, member, target_catalog, book)
     completed = new_borrowing.start_borrow()
@@ -209,6 +225,7 @@ def create_borrowing(request):
 
 
 @api_view(["POST"])
+@authenticate(["librarian"])
 def set_borrowing_status(request):
     borrow_id = request.data["borrow_id"]
     s = request.data["status"]
@@ -253,6 +270,7 @@ def set_borrowing_status(request):
 
 
 @api_view(["POST"])
+@authenticate(["librarian"])
 def edit_book_catalog(request):
     book_id = request.data["book_id"]
     catalog: BookCatalog = root.bookCatalog.get(book_id)
@@ -271,8 +289,8 @@ def edit_book_catalog(request):
 
 
 @api_view(["POST"])
+@authenticate(["librarian"])
 def add_book_catalog(request):
-    print(request.data)
     book_id = request.data["book_id"]
     title = request.data["title"]
     if not title or title == "":
@@ -299,6 +317,7 @@ def add_book_catalog(request):
 
 
 @api_view(["POST", "GET"])
+@authenticate(["librarian"])
 def add_book(request):
     book_id = request.data["book_id"]
     unique_id = request.data["unique_id"]
@@ -320,6 +339,25 @@ def add_book(request):
     root.book.insert(new_id, new_book)
     transaction_manager.commit()
     return Response(status=status.HTTP_201_CREATED)
+
+@api_view(["POST"])
+@authenticate(["librarian"])
+def remove_book(request):
+    book_id = request.data["book_id"]
+    unique_id = request.data["unique_id"]
+    catalog: BookCatalog = root.bookCatalog.get(book_id)
+    if not catalog:
+        return Response(
+            {"error": "no book catalog found"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    unique_book = catalog.get_book_list().get(unique_id)
+    if not unique_book:
+        return Response(
+            {"error": "no unique book found"}, status=status.HTTP_400_BAD_REQUEST
+        )
+    catalog.remove_book(unique_id)
+    transaction_manager.commit()
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
@@ -346,7 +384,7 @@ def get_member_data(request, token_payload):
         {"borrow_count": borrow_count, "reserve_count": reserve_count, "fine": fine}
     )
 
-# FIXME require auth
+
 @api_view(["GET"])
 @authenticate(["member"])
 def get_member_borrowing(request, token_payload):
@@ -396,21 +434,18 @@ def get_member_borrowing(request, token_payload):
     return Response({"borrowing_list": res})
 
 
-# FIXME require auth
 @api_view(["POST"])
 @authenticate(["member"])
 def create_reserve_borrowing(request, token_payload):
     member_id = token_payload["member_id"]
     unique_id = request.data["unique_id"]
     member = root.member.get(member_id)
-    print(1)
     if not member:
         return Response(
             {"error": "no member found"}, status=status.HTTP_400_BAD_REQUEST
         )
     # check if this member is borrowing this book
     lst = member.get_borrow_list()
-    print(2)
     for borrowing in lst:
         data = borrowing.get_borrow_detail()
         if (

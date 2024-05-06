@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 ###
 
-GET http://127.0.0.1:8000/book/62
+GET http://127.0.0.1:8000/book/21
 Content-Type: application/json
 
 ###
